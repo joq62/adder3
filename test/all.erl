@@ -61,10 +61,10 @@ load_start_release()->
     
     %%
     []=os:cmd(?StartCmd++" "++"daemon"),
-    timer:sleep(500),
+    timer:sleep(3000),
     pong=rpc:call(?Vm,rd,ping,[],5000),
     pong=rpc:call(?Vm,log,ping,[],5000),
-    pong=rpc:call(?Vm,adder,ping,[],5000),
+    pong=rpc:call(?Vm,adder3,ping,[],5000),
 
 
 
