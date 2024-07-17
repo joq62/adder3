@@ -11,7 +11,7 @@
 -behaviour(gen_server). 
  
 -include("log.api").
--include("adder.rd").
+-include("adder3.rd").
 
 %% API
 -export([
