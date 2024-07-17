@@ -34,12 +34,26 @@ start()->
     
     ok=setup(),
     ok=load_start_release(),
+    ok=rd_test(),
  %   ok=erlport_test(),
     io:format("Test OK !!! ~p~n",[?MODULE]),
 %    timer:sleep(1000),
 %    init:stop(),
     ok.
 
+%% --------------------------------------------------------------------
+%% Function: available_hosts()
+%% Description: Based on hosts.config file checks which hosts are avaible
+%% Returns: List({HostId,Ip,SshPort,Uid,Pwd}
+%% --------------------------------------------------------------------
+
+rd_test()->
+    io:format("Start ~p~n",[{?MODULE,?FUNCTION_NAME}]),
+    ok=initial_trade_resources(),
+    [{adder3,{adder3,'adder3@c50'}}]=rd:get_all_resources(),
+    42=rd:call(adder3,add,[20,22],5000),
+    
+    ok.
 %% --------------------------------------------------------------------
 %% Function: available_hosts()
 %% Description: Based on hosts.config file checks which hosts are avaible
@@ -65,7 +79,10 @@ load_start_release()->
     pong=rpc:call(?Vm,rd,ping,[],5000),
     pong=rpc:call(?Vm,log,ping,[],5000),
     pong=rpc:call(?Vm,adder3,ping,[],5000),
-
+    
+    pong=net_adm:ping(?Vm),
+    
+  
 
 
     AllApps=rpc:call(?Vm,application,which_applications,[],6000),
@@ -86,5 +103,16 @@ load_start_release()->
 
 setup()->
     io:format("Start ~p~n",[{?MODULE,?FUNCTION_NAME}]),
+
+    ok=application:start(rd),
+    ok=initial_trade_resources(),
     
+    ok.
+
+
+initial_trade_resources()->
+    [rd:add_local_resource(ResourceType,Resource)||{ResourceType,Resource}<-[]],
+    [rd:add_target_resource_type(TargetType)||TargetType<-[adder3]],
+    rd:trade_resources(),
+    timer:sleep(3000),
     ok.
