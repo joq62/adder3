@@ -19,6 +19,8 @@ all:
 	rm -rf ebin;
 	rm -rf rebar.lock
 	#INFO: Compile application
+	rm -rf common_include;
+	cp -r ~/erlang/simple_system/common_include .
 	rm -rf release
 	rebar3 compile
 	rebar3 release;
@@ -80,6 +82,8 @@ eunit:
 	rm -rf *_a;
 	#INFO: Creating eunit test code using test_ebin dir;
 	mkdir test_ebin;
+	rm -rf common_include;
+	cp -r ~/erlang/simple_system/common_include .
 	#rm test/dependent_apps.erl;
 	#cp /home/joq62/erlang/dev_support/dependent_apps.erl test;
 	erlc -I include -I /home/joq62/erlang/include -o test_ebin test/*.erl;
